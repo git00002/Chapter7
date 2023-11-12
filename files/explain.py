@@ -44,7 +44,7 @@ while True:
     
     # Extract and print the assistant's message from the response JSON
     assistant_message = response['choices'][0]['message']['content']
-    print("Assistant: ", assistant_message)
+    log("Assistant: ", assistant_message)
     s(assistant_message)
     
     # Add the assistant's message to the conversation history
