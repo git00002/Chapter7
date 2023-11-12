@@ -1,0 +1,43 @@
+To write the extracted code blocks to a file in between iterations of sequenced blocks, you'll need to make a slight modification to the existing code. Instead of writing all code blocks at once, you'll write them one by one as you iterate through them. I will present the adjusted code section which you should replace in your existing script:
+
+Find the section in your script that handles the main execution:
+
+```python
+if __name__ == "__main__":
+    code_blocks = extract_code_blocks(args.filename, args.language)
+    
+    if args.output:
+        write_to_file(code_blocks, args.output)
+    else:
+        for i, block in enumerate(code_blocks, 1):
+            print(f"Block {i}:\n{block}\n")
+            print("-" * 40)  # Print a separator line
+            if args.pause:
+                input("Press Enter to continue to the next block...")
+```
+
+Modify it to write to the file in the loop, each time a block is processed:
+
+```python
+if __name__ == "__main__":
+    code_blocks = extract_code_blocks(args.filename, args.language)
+    
+    if args.output:
+        with open(args.output, "w") as output_file:
+            for i, block in enumerate(code_blocks, 1):
+                output_file.write(f"Block {i}:\n{block}\n\n")
+                print(f"Block {i} has been written to {args.output}")
+                print("-" * 40)  # Print a separator line
+                if args.pause:
+                    input("Press Enter to continue to the next block...")
+    else:
+        for i, block in enumerate(code_blocks, 1):
+            print(f"Block {i}:\n{block}\n")
+            print("-" * 40)  # Print a separator line
+            if args.pause:
+                input("Press Enter to continue to the next block...")
+```
+
+This modification opens the output file for writing and writes each code block immediately after it's processed. It no longer uses the `write_to_file` function, in order to write to the file incrementally instead of all at once.
+
+Also, consider improving the script by checking if the file exists before opening it and handling possible IOError exceptions that can occur when attempting to write to the file. Additionally, always make sure that the file is closed properly, even if an error occurs, by using the `with` statement when opening files.

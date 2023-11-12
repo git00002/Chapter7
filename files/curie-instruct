@@ -1,0 +1,2 @@
+#!/bin/bash
+openai api engines.generate -i curie-instruct-beta -c "-$(echo-ne hello world)" -l 100

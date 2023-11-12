@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+import pyttsx3
+import threading
+import queue
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+        self.speak_queue = queue.Queue()
+        self.setup_tts()
+
+    def setup_tts(self):
+        self.engine = pyttsx3.init()
+
+        def tts_worker():
+            while True:
+                text = self.speak_queue.get()
+                if text == "EXIT":
+                    break
+                self.engine.say(text)
+                self.engine.runAndWait()
+
+        threading.Thread(target=tts_worker, daemon=True).start()
+
+    def speak(self, text):
+        self.speak_queue.put(text)
+
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+
+    def start(self):
+        while True:
+            command_prompt = "IDE>>> "
+            command = input(command_prompt)
+            if command.lower() in ['exit', 'quit']:
+                self.speak_queue.put("EXIT")
+                break
+            result = self.execute(command)
+            print(result)
+            self.speak(command_prompt + command + str(result))
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+
+
+"""
+
+import pyttsx3
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+        self.engine = pyttsx3.init()  # Initialize the TTS engine
+    
+    def speak(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+
+    def start(self):
+        while True:
+            command_prompt = "IDE>>> "
+            command = input(command_prompt)
+            if command.lower() in ['exit', 'quit']:
+                break
+            result = self.execute(command)
+            print(result)
+            self.speak(command_prompt + command + str(result))
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+
+
+import pyttsx3
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+        self.engine = pyttsx3.init()  # Initialize the TTS engine
+    
+    def speak(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+
+    def start(self):
+        while True:
+            command_prompt = "IDE>>> "
+            print(command_prompt, end="")
+            self.speak(command_prompt)
+            command = input()
+            if command.lower() in ['exit', 'quit']:
+                break
+            result = self.execute(command)
+            print(result)
+            self.speak(str(result))
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+        self.engine = pyttsx3.init()  # Initialize the TTS engine
+    
+    def speak(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+
+    def start(self):
+        while True:
+            self.speak("Enter your command:")
+            command = input("IDE>>> ")
+            if command.lower() in ['exit', 'quit']:
+                break
+            result = self.execute(command)
+            print(result)
+            self.speak(f"Output: {result}")
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+
+import pyttsx3
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+        self.engine = pyttsx3.init()  # Initialize the TTS engine
+    
+    def speak(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+
+    def start(self):
+        while True:
+            self.speak("Enter your command:")
+            command = input("IDE>>> ")
+            if command.lower() in ['exit', 'quit']:
+                break
+            result = self.execute(command)
+            print(result)
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+
+
+
+class IDE_REPL:
+    def __init__(self):
+        self.session = {}  # Storing variables, functions, and states.
+    
+    def execute(self, command):
+        try:
+            # Dynamically execute the user's command
+            output = eval(command, {}, self.session)
+            return output
+        except Exception as e:
+            return str(e)
+    
+    def start(self):
+        while True:
+            command = input("IDE>>> ")
+            if command.lower() in ['exit', 'quit']:
+                break
+            result = self.execute(command)
+            print(result)
+
+ide_repl = IDE_REPL()
+ide_repl.start()
+"""

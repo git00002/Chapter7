@@ -1,0 +1,50 @@
+import os
+import openai
+
+openai.api_key = os.getenv('OPENAI_API_KEY')
+
+class CodeGenerator:
+    def __init__(self):
+        with open('input.py', 'r') as file:
+            self.inputt = file.read()
+    
+    def generate_modification(self, existing_code):
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=self.inputt,
+            max_tokens=60
+        )
+        suggested_code = response.choices[0].text.strip()
+        return suggested_code
+    
+    def eval_code(self, code):
+        try:
+            exec(code)
+            return True
+        except Exception as e:
+            print(f"Error executing code: {e}")
+            return False
+    
+    def main(self):
+        code = self.inputt
+        print(f"Initial Code: {code}")
+        not_satisfied_with_code = True
+        while not_satisfied_with_code:
+            modification = self.generate_modification(code)
+            modified_code = code + modification
+            print(f"Modified Code: {modified_code}")
+            if self.eval_code(modified_code):
+                code = modified_code
+            else:
+                print("Code modification caused an error. Trying another modification...")
+                continue
+            satisfied = input("Are you satisfied with the code? (Y/N): ")
+            satisfied = satisfied.lower()
+            if satisfied == "y" or satisfied == "yes":
+                not_satisfied_with_code = False
+            else:
+                continue
+        print(code)
+
+generator = CodeGenerator()
+generator.main()

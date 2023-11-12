@@ -1,0 +1,24 @@
+#!/bin/bash
+
+chat_history="chat_history.txt"
+
+# Ensure chat_history.txt file exists
+touch "$chat_history"
+
+while true; do
+    # Get input from the user
+    read -p "say something: " user_input
+
+    # Append user's input to the chat history
+    echo "User: $user_input" >> "$chat_history"
+
+    # Call the OpenAI API with your input
+    response=$(openai api chat_completions.create -g user "$user_input" -m gpt-3.5-turbo)
+
+    # Display the response, vocalize it with espeak, and also append to the chat history
+    echo "Assistant: $response" | tee -a "$chat_history" >(espeak)
+
+    # For 3-shot prompting, get the last 6 lines (3 exchanges) from the chat history
+    last_3_exchanges=$(tail -n 6 "$chat_history")
+    echo -e "\nLast 3 Exchanges:\n$last_3_exchanges\n"
+done

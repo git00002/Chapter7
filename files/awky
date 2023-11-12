@@ -1,0 +1,11 @@
+#!/usr/local/bash 
+
+awk '
+BEGIN { 
+    count = 1 
+}
+/{.*}Copy code/ {
+    gsub(/{.*}Copy code/, "pass\\nprint(\'==========>\" count \"<==========\')\\n#!/usr/bin/env python3\\nprint(\'" strftime() "\')\\n")
+    count++
+}
+1' <(echo "$content")

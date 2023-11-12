@@ -1,0 +1,50 @@
+I understand your concern. You want to append extracted blocks to an output file one by one, with the option to process the blocks before appending. Also, it is essential for you to overwrite the existing content of the output file at the beginning of the operation, ensuring only the new session's blocks are saved. Here's how you can achieve that:
+
+1. **Start a new session**: Open the output file in write mode ('w') to clear any existing content. Close the file immediately after opening to effectively clear it. Subsequent writes should use append mode ('a') to add new blocks without deleting existing ones from the current session.
+
+2. **Iterate over blocks**: Iterate over the extracted blocks, displaying them to the user.
+
+3. **Process block before writing**: Define a placeholder for any text processing you want to do on each block.
+
+4. **Get user input**: Prompt the user to decide whether to write the block to the file, skip it, or exit.
+
+5. **Write to file**: If the user chooses to write, open the output file in append mode and write the processed block.
+
+6. **Close and Repeat**: Close the file (after appending) and repeat the loop for each block.
+
+Here is an example of how you can implement this:
+
+```python
+# Assuming 'extract_blocks' is a function that returns a list of code blocks
+blocks = extract_blocks(input_source)
+
+# Clear the content of the output file at the beginning of the session
+with open('output.txt', 'w') as file:
+    pass  # Opening in write mode ('w') clears file, immediately close the file
+
+for block in blocks:
+    print(block)  # Display the current block
+
+    # Placeholder for any further text processing
+    processed_block = some_text_processing_function(block)
+
+    user_input = input("Write to file (w), skip (s), or exit (e)? ")
+
+    if user_input.lower() == 'w':
+        # Append the processed block to the output file
+        with open('output.txt', 'a') as file:
+            file.write(processed_block + "\n\n")
+        print("Block written to file.")
+    elif user_input.lower() == 'e':
+        # Exit the iteration prematurely
+        print("Exiting.")
+        break
+    # No need for an 'else' as 'continue' is the default action to proceed to the next iteration
+
+# Define the placeholder for text processing if not already implemented
+def some_text_processing_function(block):
+    # Modify the block as needed
+    return block
+```
+
+This logic ensures that you start with a clean output file and then append each processed block after user confirmation. If `some_text_processing_function` is not yet implemented, replace it with the actual processing you intend to perform. Note that the `with` statement is used for file operations to ensure that files are properly closed after being written to, even if an error occurs during the write.

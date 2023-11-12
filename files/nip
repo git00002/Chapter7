@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+import openai
+import json
+import os
+import sys
+from pyttsx3 import speak as s
+
+def openai_api(file_path):
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+    if not openai.api_key:
+        print("Please set your OpenAI API key as an environment variable named OPENAI_API_KEY.")
+        return
+
+    # Read the static user message from the file
+    with open(file_path, 'r') as f:
+        user_message = f.read()
+
+    # Initialize messages with the static user message
+    messages = [{"role": "user", "content": user_message}]
+
+    while True:
+        # Get dynamic system message
+        system_message = input("Enter your system message (or type 'exit' to quit): ")
+        if system_message.lower() == 'exit':
+            break
+
+        # Append system message to messages
+        messages.append({"role": "system", "content": system_message})
+
+        # Generate assistant's response
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+
+        # Extract and print the assistant's response
+        assistant_response = response['choices'][0]['message']['content']
+        print(assistant_response)
+        s(assistant_response)
+
+        # Append assistant's response to messages for context in the next loop
+        messages.append({"role": "assistant", "content": assistant_response})
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python script_name.py <file_path>")
+        sys.exit(1)
+
+    file_path = sys.argv[1]
+    print(f"\nReading user message from {file_path}")
+    openai_api(file_path)

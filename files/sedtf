@@ -1,0 +1,21 @@
+bashCopy code#!/bin/bash
+
+# This is your script.sh
+
+# Suppose you have a command whose output you want to process
+# For example, let's say you have a command that lists files in a directory
+ls -l /path/to/directory
+
+# Now, you can use the | operator to pass the output to another command
+# Let's use 'awk' to extract specific columns from the output
+ls -l /path/to/directory | awk '{print $1, $5}'
+
+# Alternatively, you can use 'sed' to perform text transformations
+ls -l /path/to/directory | sed 's/old_pattern/new_pattern/'
+
+# You can also use 'grep' to filter lines based on a pattern
+ls -l /path/to/directory | grep "pattern_to_search"
+
+# If you want to use 'cut' to extract columns, you can do this
+ls -l /path/to/directory | cut -d' ' -f1,5
+bashCopy codechmod +x script.sh

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+content=$(cat)
+
+COUNT=1
+while [[ $content =~ "bashCopy code" ]]; do
+    content=$(echo "$content" | sed "0,/pythonCopy code/s//pass\\nprint(\'==========>{$COUNT}<==========\')\n#!\/usr\/bin\/env python3\nprint(\\'$(date)\\')\n\n/")
+    content=$(echo "$content" | sed "0,/\`\`\`python/s//pass\\nprint(\'==========>{$COUNT}<==========\')\n#!\/usr\/bin\/env python3\nprint(\\'$(date)\\')\n\n/")
+    content=$(echo "$content" | sed "0,/markdownCopy code/s//pass\\nprint(\'==========>{$COUNT}<==========\')\n#!\/usr\/bin\/env python3\nprint(\\'$(date)\\')\n\n/")
+    content=$(echo "$content" | sed "0,/bashCopy code/s//pass\\nprint(\'==========>{$COUNT}<==========\')\n#!\/usr\/bin\/env python3\nprint(\\'$(date)\\')\n\n/")
+    content=$(echo "$content" | sed "0,/jsonCopy code/s//pass\\nprint(\'==========>{$COUNT}<==========\')\n#!\/usr\/bin\/env python3\nprint(\\'$(date)\\')\n\n/")
+#    content=$(echo "$content" | sed "0,/bashCopy code/s//==========>{$COUNT}<==========\n#!\/usr\/bin\/env python3\n$(date)\n\n/")
+#    content=$(echo "$content" | sed "0,/bashCopy code/s//==========>{$COUNT}<==========\n#!\/usr\/bin\/env python3\n$(date)\n\n/")
+#    content=$(echo "$content" | sed "0,/bashCopy code/s//==========>{$COUNT}<==========\n#!\/usr\/bin\/env python3\n$(date)\n\n/")
+#    content=$(echo "$content" | sed "0,/bashCopy code/s//==========>{$COUNT}<==========\n#!\/usr\/bin\/env python3\n$(date)\n\n/")
+#    content=$(echo "$content" | sed "0,/bashCopy code/s//==========>{$COUNT}<==========\n#!\/usr\/bin\/env python3\n$(date)\n\n/")
+    ((COUNT++))
+done
+
+# Output the modified content
+echo "$content"
+

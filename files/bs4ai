@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import argparse
+import requests
+from bs4 import BeautifulSoup
+import sys
+
+def extract_code_snippets(html_content):
+    soup = BeautifulSoup(html_content, 'html.parser')
+    code_snippets = soup.find_all('pre')
+    codes = [snippet.text.strip() for snippet in code_snippets]
+    return codes
+
+def fetch_html_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for HTTP errors
+    return response.text
+
+if __name__ == "__main__":
+    # Argument parser setup
+    parser = argparse.ArgumentParser(description="Extract code snippets from provided HTML content.")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--url", help="URL to fetch the HTML content.")
+    group.add_argument("html_file", nargs='?', type=argparse.FileType('r'), help="Path to the HTML file containing the content.")
+    
+    parser.add_argument("-b", "--backup", help="Path to backup the extracted code snippets.", required=False)
+    
+    args = parser.parse_args()
+    
+    if args.url:
+        html_content = fetch_html_from_url(args.url)
+    else:
+        html_content = args.html_file.read()
+    
+    codes = extract_code_snippets(html_content)
+
+    # Display on console
+    for code in codes:
+        print(code)
+    
+    # Backup to a file if backup path is provided
+    if args.backup:
+        with open(args.backup, 'w', encoding='utf-8') as backup_file:
+            for code in codes:
+                backup_file.write(code + '\n\n')

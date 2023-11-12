@@ -1,0 +1,7 @@
+#!/bin/bash
+
+while true; do
+    read -p "say something: " input_var
+    response=$(openai api chat_completions.create -g user "$input_var" -m gpt-3.5-turbo)
+    echo "$response" | tee >(espeak)
+done
